@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:lagerverwaltung/provider/Lagern.dart';
+import 'package:lagerverwaltung/widgets/GridViewChild.dart';
 import 'package:lagerverwaltung/widgets/MyDrawer.dart';
+import 'package:provider/provider.dart';
 
 class LagerPage extends StatelessWidget {
   static const route = '/lager';
@@ -9,7 +13,17 @@ class LagerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Lagerverwaltung"),),
-      body: Container(),
+      body: Consumer<Lagern>(
+        builder: (context, lager, child) => GridView.builder(
+          gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
+          scrollDirection: Axis.vertical,
+          itemCount: 2,
+          itemBuilder: (_, index) {
+              return GridViewChild();
+          },
+        ),
+      ),
       drawer: MyDrawer(),
     );
   }

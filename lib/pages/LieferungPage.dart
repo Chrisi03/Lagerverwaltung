@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lagerverwaltung/widgets/MyDrawer.dart';
 
 class LieferungPage extends StatelessWidget {
   static const route = '/lieferungen';
@@ -11,6 +12,7 @@ class LieferungPage extends StatelessWidget {
         title: Text('Lieferungen'),
       ),
       body: Container(),
+      drawer: MyDrawer(),
     );
   }
 }
