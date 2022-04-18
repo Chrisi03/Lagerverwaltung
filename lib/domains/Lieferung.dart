@@ -1,8 +1,14 @@
 class Lieferung {
   String? id;
-  int anzahl;
+  String anzahl;
   String artikel;
-  DateTime lieferDatum;
 
-  Lieferung(this.id,this.anzahl,this.artikel,this.lieferDatum);
+  Lieferung({this.id, required this.anzahl, required this.artikel});
+
+  Lieferung.fromJson(Map<String, dynamic> json, String id)
+      : this(
+          id: id,
+          anzahl: json['amount'],
+          artikel: json['article'],
+        );
 }
