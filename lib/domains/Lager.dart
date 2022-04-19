@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'Lieferung.dart';
 
 class Lager {
@@ -17,16 +19,18 @@ class Lager {
   Lager.fromJson(Map<String, dynamic> json, String id)
       : this(
             id: id,
-            kapazitaet: int.parse(json['capacity']),
-            fuellstand: int.parse(json['fillLevel']),
+            kapazitaet: json['capacity'],
+            fuellstand: json['fillLevel'],
             location: json['location'],
-            lieferungen: json['location'] == null
+            lieferungen: json['Lieferungen'] == null
                 ? []
-                : json['Lieferung']
+                : json['Lieferungen']
                     .entries
                     .map<Lieferung>(
                         (entry) => Lieferung.fromJson(entry.value, entry.key))
-                    .toList());
+                    .toList(),
+  );
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -36,4 +40,23 @@ class Lager {
       'Lieferung': lieferungen
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Lager &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          kapazitaet == other.kapazitaet &&
+          fuellstand == other.fuellstand &&
+          location == other.location &&
+          listEquals(lieferungen, other.lieferungen);
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      kapazitaet.hashCode ^
+      fuellstand.hashCode ^
+      location.hashCode ^
+      lieferungen.hashCode;
 }

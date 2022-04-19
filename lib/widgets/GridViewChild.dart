@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lagerverwaltung/domains/Lager.dart';
+import 'package:lagerverwaltung/pages/LieferungPage.dart';
 
 class GridViewChild extends StatefulWidget {
-  const GridViewChild({Key? key}) : super(key: key);
+  Lager lager;
+  GridViewChild(this.lager,{Key? key}) : super(key: key);
 
   @override
   _GridViewChildState createState() => _GridViewChildState();
@@ -17,8 +20,8 @@ class _GridViewChildState extends State<GridViewChild> {
           child: Row(
             children: [
               Container(
-                child: Text('Wien'),
-                width: 300,
+                child: Text(widget.lager.location,textAlign: TextAlign.center,),
+                width: 150,
               ),
               Expanded(
                 child: Stack(
@@ -27,22 +30,21 @@ class _GridViewChildState extends State<GridViewChild> {
                     RotatedBox(
                       quarterTurns: 3,
                       child: LinearProgressIndicator(
-                        value: 0.7,
+                        value: widget.lager.fuellstand/widget.lager.kapazitaet,
                       ),
                     ),
-                    Text('Test',style: TextStyle(),textAlign: TextAlign.center),
+                    Text(((widget.lager.fuellstand/widget.lager.kapazitaet)*100).toString()+'%',style: TextStyle(),textAlign: TextAlign.center),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        onTap: () {},
+        onTap: () {
+             Navigator.push(context, MaterialPageRoute(builder: (context) => LieferungPage(widget.lager)));
+        },
       ),
-      footer: GridTileBar(
-        //backgroundColor: Colors.black45,
-        title: Text('title'),
-      ),
+
     );
   }
 }

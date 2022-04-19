@@ -9,7 +9,6 @@ class MyDrawer extends StatelessWidget {
 
   var drawerItems = [
     DrawerItem(Icons.storage, 'Lagerverwaltung'),
-    DrawerItem(Icons.history, 'Lieferungen'),
     DrawerItem(Icons.assignment, 'Artikel')
   ];
 
@@ -35,8 +34,6 @@ class MyDrawer extends StatelessWidget {
   void _openOtherPage(BuildContext context, String page) {
     if (page == 'Lagerverwaltung') {
       Navigator.of(context).popAndPushNamed(LagerPage.route);
-    } else if (page == 'Lieferungen') {
-      Navigator.of(context).popAndPushNamed(LieferungPage.route);
     } else {
       Navigator.of(context).popAndPushNamed(ProductsPage.route);
     }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lagerverwaltung/pages/LagerPage.dart';
 import 'package:lagerverwaltung/pages/LieferungPage.dart';
 import 'package:lagerverwaltung/pages/ProductsPage.dart';
+import 'package:lagerverwaltung/provider/Artikel.dart';
 import 'package:lagerverwaltung/provider/Lagern.dart';
+import 'package:lagerverwaltung/provider/Lieferungen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -16,7 +18,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
-      ChangeNotifierProvider<Lagern>(create: (_) => Lagern(),)
+      ChangeNotifierProvider<Lagern>(create: (_) => Lagern(),),
+      ChangeNotifierProvider<Artikel>(create: (_) => Artikel(),),
+      ChangeNotifierProvider<Lieferungen>(create: (_) => Lieferungen(),)
     ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -25,7 +29,6 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/': (context) => LagerPage(),
-          LieferungPage.route: (context) => LieferungPage(),
           ProductsPage.route: (context) => ProductsPage(),
           LagerPage.route: (context) => LagerPage()
         },

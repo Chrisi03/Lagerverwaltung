@@ -5,9 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lagerverwaltung/domains/Lager.dart';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Lagern with ChangeNotifier {
   var _values = <Lager>[];
+  late BuildContext context;
 
   static const baseUrl =
       'https://lagerverwaltung-97f37-default-rtdb.europe-west1.firebasedatabase.app/';
@@ -21,20 +23,33 @@ class Lagern with ChangeNotifier {
     try {
       final response = await http.get(url);
       final data = jsonDecode(response.body);
-      print(data);
       final serverValues = data.entries
           .map<Lager>((entry) => Lager.fromJson(entry.value, entry.key))
           .toList();
-      print(serverValues+'test');
-
       if (!listEquals(_values, serverValues)) {
         _values = serverValues;
         notifyListeners();
       }
     } catch (error) {
-      print(error);
+       final snackBar = SnackBar(
+        content: const Text('Verbindung Fehlgeschlagen'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
-  Future<void> addLager() async {}
+  Future<void> addLager(int kapazitaet, String location) async {
+    final url = Uri.parse('$baseUrl/Lager.json');
+    final lager = Lager(
+        fuellstand: 0, kapazitaet: kapazitaet, location: location);
+    final body = jsonEncode(lager.toJson());
+    try {
+      final response = await http.post(url, body: body);
+      lager.id = jsonDecode(response.body)['name'];
+      _values.add(lager);
+      notifyListeners();
+    } catch (error) {}
+  }
+
 }
+

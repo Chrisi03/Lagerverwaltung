@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:lagerverwaltung/pages/AddLager.dart';
 import 'package:lagerverwaltung/provider/Lagern.dart';
 import 'package:lagerverwaltung/widgets/GridViewChild.dart';
 import 'package:lagerverwaltung/widgets/MyDrawer.dart';
@@ -16,10 +19,23 @@ class LagerPage extends StatefulWidget {
 
 class _LagerPageState extends State<LagerPage> {
   late Future _futureChats;
+  late Timer timer;
 
   @override
   void initState() {
+    Provider.of<Lagern>(context, listen: false).context = context;
+
     _futureChats = Provider.of<Lagern>(context, listen: false).loadLager();
+
+    timer = Timer.periodic(Duration(seconds: 5), (_) {
+      _futureChats = Provider.of<Lagern>(context, listen: false).loadLager();
+      print('test');
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
   }
 
   @override
@@ -28,6 +44,11 @@ class _LagerPageState extends State<LagerPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Lagerverwaltung"),
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AddLager()));
+          }, icon: Icon(Icons.add)),
+        ],
       ),
       body: FutureBuilder(
           future: _futureChats,
@@ -39,12 +60,11 @@ class _LagerPageState extends State<LagerPage> {
                 : Consumer<Lagern>(
                     builder: (context, lager, child) => GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1),
+                          crossAxisCount: 2),
                       scrollDirection: Axis.vertical,
-                      itemCount: 2,
+                      itemCount: lager.all.length,
                       itemBuilder: (_, index) {
-                        print(lager.all.length);
-                        return GridViewChild();
+                        return GridViewChild(lager.all[index]);
                       },
                     ),
                   );
